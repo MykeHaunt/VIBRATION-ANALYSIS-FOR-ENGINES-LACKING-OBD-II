@@ -1,4 +1,4 @@
-dash==2.9.0
+dash==2.15.0
 numpy==1.23.5
 scipy==1.9.3
 pdfkit==1.0.0
