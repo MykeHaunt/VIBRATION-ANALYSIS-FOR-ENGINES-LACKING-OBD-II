@@ -4,7 +4,7 @@
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1234567.svg)](https://doi.org/10.5281/zenodo.1234567)
-
+```
 **Professional-grade vibration diagnostics for pre-OBD II engines**  
 Detect valve train anomalies, combustion irregularities, and mechanical wear using advanced signal processing and machine learning.
 
