@@ -1,0 +1,6 @@
+dash==2.9.0
+numpy==1.23.5
+scipy==1.9.3
+pdfkit==1.0.0
+PyYAML==6.0
+pytest==7.2.0
