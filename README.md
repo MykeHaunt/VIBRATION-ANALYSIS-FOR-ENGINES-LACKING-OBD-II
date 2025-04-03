@@ -13,3 +13,6 @@ A comprehensive engine vibration analysis system featuring a real-time dashboard
 1. Install dependencies:
    ```bash
    pip install -r requirements.txt
+
+   ![IMG_9853](https://github.com/user-attachments/assets/1ad574f3-5075-48e8-b116-a78963de1a49)
+![IMG_9854](https://github.com/user-attachments/assets/8215ac86-cd2e-497e-8ba1-d1c97e1680fc)
