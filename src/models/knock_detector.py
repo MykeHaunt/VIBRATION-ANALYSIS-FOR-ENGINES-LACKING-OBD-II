@@ -1,33 +1,45 @@
+import numpy as np
 from scipy.signal import find_peaks
 
-class KnockAnalyzer:
-    DETECTION_THRESHOLDS = {
-        'knock': {'freq_range': (2000, 8000), 'min_amplitude': 0.15},
-        'ping': {'freq_range': (6000, 12000), 'min_amplitude': 0.2},
-        'detonation': {'freq_range': (8000, 15000), 'min_amplitude': 0.3},
-        'tap': {'freq_range': (1000, 4000), 'min_amplitude': 0.1}
-    }
-
-    def analyze_peaks(self, frequencies, amplitudes):
+class KnockDetector:
+    def detect(self, frequencies, amplitudes):
         results = {}
-        for knock_type, params in self.DETECTION_THRESHOLDS.items():
-            mask = (frequencies >= params['freq_range'][0]) & \
-                   (frequencies <= params['freq_range'][1])
-            peaks, _ = find_peaks(amplitudes[mask], height=params['min_amplitude'])
+        # Frequency bands for knock types
+        bands = {
+            'knock': (2000, 8000),
+            'ping': (6000, 12000),
+            'detonation': (8000, 15000),
+            'tap': (1000, 4000)
+        }
+        
+        frequencies = np.array(frequencies)
+        amplitudes = np.array(amplitudes)
+        
+        for knock_type, (low, high) in bands.items():
+            mask = (frequencies >= low) & (frequencies <= high)
+            filtered_amplitudes = amplitudes[mask]
+            filtered_frequencies = frequencies[mask]
             
-            if len(peaks) > 3:  # Minimum peaks for confirmation
+            # Identify peaks above threshold amplitude
+            peaks, properties = find_peaks(filtered_amplitudes, height=0.1)
+            
+            if len(peaks) > 3:
                 results[knock_type] = {
-                    'severity': len(peaks),
-                    'primary_frequency': frequencies[mask][peaks[0]],
-                    'affected_components': self.get_affected_components(knock_type)
+                    'severity': self._calculate_severity(len(peaks)),
+                    'primary_freq': float(filtered_frequencies[peaks[0]]),
+                    'components': self._affected_components(knock_type)
                 }
         return results
 
-    def get_affected_components(self, knock_type):
-        component_map = {
-            'knock': ['Valves', 'Lifters', 'Pushrods'],
-            'ping': ['Combustion Chamber', 'Spark Plugs'],
-            'detonation': ['Pistons', 'Connecting Rods'],
-            'tap': ['Timing Chain', 'Camshaft']
+    def _calculate_severity(self, num_peaks):
+        # Severity: 15 per peak, capped at 100
+        return min(100, num_peaks * 15)
+    
+    def _affected_components(self, knock_type):
+        mapping = {
+            'knock': ['piston', 'connecting rod'],
+            'ping': ['cylinder head'],
+            'detonation': ['spark plug', 'valve'],
+            'tap': ['bearing']
         }
-        return component_map.get(knock_type, [])
+        return mapping.get(knock_type, [])
